@@ -80,12 +80,24 @@ body {
 									var repost=0;
 									var comments=0;
 									var new_followers=0;
+									var flag = "";
 									for(var i=0;i<arr.length;i++){
-										repost=Number(repost)+Number(arr[i].reposted_count); 
-										comments=Number(comments)+Number(arr[i].receive_comments_count); 
+										if(arr[i].reposted_count != arr[i].followers_count){
+											repost=Number(repost)+Number(arr[i].reposted_count);
+										}else{
+											flag+=arr[i].day_key+" ";
+										}
+										if(arr[i].receive_comments_count != arr[i].bi_followers_count){
+											comments=Number(comments)+Number(arr[i].receive_comments_count);
+										}
 									}
 									new_followers=Number(arr[arr.length-1].followers_count)-Number(arr[0].followers_count);
-									$("#test_ajax_content").html('retweets: '+repost+", comments:"+comments+", new_followers:"+new_followers);
+									var total=repost+comments+new_followers;
+									var result='retweets: '+repost+", comments:"+comments+", new_followers:"+new_followers+", total:"+total;
+									if(flag != ""){
+										result+="                    微博返回数据异常，已将"+flag+"数据移除不计入本次查询";
+									}
+									$("#test_ajax_content").html(result);
 								}else{
 									$("#test_ajax_content").html("该微博不存在!");
 								}
